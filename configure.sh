@@ -1,14 +1,18 @@
 #!/bin/bash
 CWD=$(pwd)
 
-NDK=$ANDROID_SDK/ndk-bundle
+mkdir -p bin/mybin
+ln -s "$(which python2)" bin/mybin/python
+export PATH="$PWD/bin/mybin:$PATH"
+
+[[ -n $ANDROID_SDK ]] || { echo "ANDROID_SDK is not set"; exit 1; }
+NDK=$ANDROID_SDK/ndk/23.1.7779620
 
 HOST=linux-x86_64
 
 ANDROID_VER=23
-TOOLCHAIN_VER=4.9
 
-TOOLCHAIN=$CWD/bin/ndk/toolchain
+TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/darwin-x86_64
 
 # Flags for 32-bit ARM
 #ABI=arm-linux-androideabi
@@ -34,21 +38,18 @@ TRIPLE=aarch64-linux-android
 #PLATFORM_ARCH=x86_64
 #TRIPLE=x86_64-linux-android
 
-export CC="$CWD/cc_shim.py $TOOLCHAIN/bin/clang"
-export AR=$TOOLCHAIN/$TRIPLE-ar
-export RANLIB=$TOOLCHAIN/$TRIPLE-ranlib
+export CC="$CWD/cc_shim.py $TOOLCHAIN/bin/$TRIPLE$ANDROID_VER-clang"
+export AR=$TOOLCHAIN/bin/$TRIPLE-ar
+export RANLIB=$TOOLCHAIN/bin/$TRIPLE-ranlib
 
-COMPILE_SYSROOT=$TOOLCHAIN/sysroot
-export CFLAGS="--sysroot=$COMPILE_SYSROOT $COMPILER_FLAG -O2 -D_FORTIFY_SOURCE=2 -D__ANDROID_API__=$ANDROID_VER -D__USE_FILE_OFFSET64=1 -fstack-protector-all -fPIE -Wa,--noexecstack -Wformat -Wformat-security"
-
-LINK_SYSROOT=$NDK/platforms/android-$ANDROID_VER/arch-$PLATFORM_ARCH
-export LDFLAGS="--sysroot=$LINK_SYSROOT $LINKER_FLAG -Wl,-z,relro,-z,now"
+export CFLAGS="$COMPILER_FLAG -O2 -D_FORTIFY_SOURCE=2 -D__ANDROID_API__=$ANDROID_VER -D__USE_FILE_OFFSET64=1 -fstack-protector-all -fPIE -Wa,--noexecstack -Wformat -Wformat-security"
+export LDFLAGS="$LINKER_FLAG -Wl,-z,relro,-z,now"
 
 # Create standalone tool chain
-rm -rf $TOOLCHAIN
-echo "Creating standalone toolchain..."
-$NDK/build/tools/make_standalone_toolchain.py --arch $PLATFORM_ARCH --api $ANDROID_VER --install-dir $TOOLCHAIN --unified-headers
+# rm -rf $TOOLCHAIN
+# echo "Creating standalone toolchain..."
+# $NDK/build/tools/make_standalone_toolchain.py --arch $PLATFORM_ARCH --api $ANDROID_VER --install-dir $TOOLCHAIN --unified-headers
 
 # Configure Samba build
 echo "Configuring Samba..."
-$CWD/configure --hostcc=$(which gcc) --without-ads --without-ldap --without-acl-support --without-ad-dc --cross-compile --cross-answers=build_answers --prefix=$CWD/out
+$CWD/configure --hostcc="$(which gcc)" --without-ads --without-ldap --without-acl-support --without-ad-dc --cross-compile --cross-answers=build_answers --prefix=$CWD/out
