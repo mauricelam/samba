@@ -1,3 +1,13 @@
+This fork / branch includes the changes for Android's samba-documents-provider.
+https://github.com/mauricelam/samba-documents-provider
+
+See https://github.com/mauricelam/samba-documents-provider/blob/master/README.md
+for the steps to compile
+
+
+README for Samba:
+
+
 This is the release version of Samba, the free SMB and CIFS client and
 server and Domain Controller for UNIX and other operating
 systems. Samba is maintained by the Samba Team, who support the

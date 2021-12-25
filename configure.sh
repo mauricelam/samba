@@ -1,18 +1,20 @@
 #!/bin/bash
 CWD=$(pwd)
 
-mkdir -p bin/mybin
-ln -s "$(which python2)" bin/mybin/python
-export PATH="$PWD/bin/mybin:$PATH"
-
+if [[ -z $NDK ]]; then
 [[ -n $ANDROID_SDK ]] || { echo "ANDROID_SDK is not set"; exit 1; }
 NDK=$ANDROID_SDK/ndk/23.1.7779620
+fi
 
 HOST=linux-x86_64
 
 ANDROID_VER=23
 
+if [[ $(uname) == "Darwin" ]]; then
 TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/darwin-x86_64
+else
+TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/linux-x86_64
+fi
 
 # Flags for 32-bit ARM
 #ABI=arm-linux-androideabi
