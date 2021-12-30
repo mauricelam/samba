@@ -378,7 +378,11 @@ int rep_getifaddrs(struct ifaddrs **ifap)
 #endif /* HAVE_IFACE_AIX */
 
 #ifdef __ANDROID__
-#include "netlink_ifaddrs.c"
+#include <ifaddrs.h>  // This header file is available in SDK 24 or above
+
+void rep_freeifaddrs(struct ifaddrs *ifap) {
+  freeifaddrs(ifap);
+}
 #define _FOUND_IFACE_ANY
 #endif /* __ANDROID__ */
 

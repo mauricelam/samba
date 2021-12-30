@@ -34,6 +34,6 @@ Checking for the maximum value of the 'time_t' type: FAIL
 Checking whether the realpath function allows a NULL argument: FAIL
 Checking for ftruncate extend: FAIL
 getcwd takes a NULL argument: OK
-Checking for HAVE_IFACE_IFCONF: FAIL
+Checking for HAVE_IFACE_IFCONF: OK
 Checking whether we can use Linux thread-specific credentials: FAIL
 Checking whether fcntl lock supports open file description locks: FAIL
