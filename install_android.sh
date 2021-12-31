@@ -1,6 +1,6 @@
 #!/bin/bash
 
-targetpath=../samba-documents-provider
+targetpath=../
 if [[ ! -d $targetpath ]];then
   echo "Cannot resolve path $targetpath" >&2
   exit 1

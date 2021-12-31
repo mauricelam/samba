@@ -1,8 +1,11 @@
 This fork / branch includes the changes for Android's samba-documents-provider.
-https://github.com/mauricelam/samba-documents-provider
+https://github.com/mauricelam/samba-documents-provider and is designed to be
+used as a submodule for that.
 
 See https://github.com/mauricelam/samba-documents-provider/blob/master/README.md
 for the steps to compile
+
+git clone --recurse-submodules https://github.com/mauricelam/samba-documents-provider.git
 
 
 README for Samba:
